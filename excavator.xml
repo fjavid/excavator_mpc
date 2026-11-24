@@ -1,0 +1,48 @@
+<mujoco model="excavator">
+  <compiler angle="radian" autolimits="true"/>
+  <option integrator="implicitfast" timestep="0.002"/>
+
+  <visual>
+    <global offwidth="1280" offheight="720"/>
+  </visual>
+
+  <worldbody>
+    <light pos="0 0 10" dir="0 0 -1" diffuse="0.8 0.8 0.8"/>
+    <geom name="ground" type="plane" size="12 12 0.1" rgba="0.45 0.4 0.35 1"/>
+
+    <!-- target grade lines: reach 3.2..4.2 m at height 1.0 m, at swing 0 and 20 deg -->
+    <geom name="grade0"  type="cylinder" fromto="3.2 0 1.0  4.2 0 1.0" size="0.015"
+          rgba="0 0.8 0 1" contype="0" conaffinity="0"/>
+    <geom name="grade20" type="cylinder" fromto="3.007 1.094 1.0  3.947 1.436 1.0" size="0.015"
+          rgba="0 0.8 0 1" contype="0" conaffinity="0"/>
+
+    <body name="house" pos="0 0 0" gravcomp="1">
+      <joint name="swing" axis="0 0 1" range="-1.5708 1.5708" damping="0.1"/>
+      <geom name="cab" type="box" pos="-0.3 0 1.0" size="0.8 0.7 0.5" rgba="0.9 0.7 0.1 1"
+            contype="0" conaffinity="0"/>
+      <body name="boom" pos="0 0 1.5" gravcomp="1">
+        <joint name="boom" axis="0 -1 0" range="0.1745 1.3090" damping="0.1"/>
+        <geom name="boom_g" type="capsule" fromto="0 0 0  3.0 0 0" size="0.12"
+              rgba="0.9 0.7 0.1 1" contype="0" conaffinity="0"/>
+        <body name="stick" pos="3.0 0 0" gravcomp="1">
+          <joint name="stick" axis="0 -1 0" range="-2.6180 -0.7854" damping="0.1"/>
+          <geom name="stick_g" type="capsule" fromto="0 0 0  2.0 0 0" size="0.09"
+                rgba="0.9 0.7 0.1 1" contype="0" conaffinity="0"/>
+          <body name="bucket" pos="2.0 0 0" gravcomp="1">
+            <joint name="bucket" axis="0 -1 0" range="-1.1345 1.3090" damping="0.1"/>
+            <geom name="bucket_g" type="capsule" fromto="0 0 0  0.8 0 0" size="0.06"
+                  rgba="0.5 0.5 0.55 1" contype="0" conaffinity="0"/>
+            <site name="tooth" pos="0.8 0 0" size="0.04" rgba="1 0 0 1"/>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <velocity name="u_swing"  joint="swing"  kv="1" ctrlrange="-0.45 0.45"/>
+    <velocity name="u_boom"   joint="boom"   kv="1" ctrlrange="-0.50 0.50"/>
+    <velocity name="u_stick"  joint="stick"  kv="1" ctrlrange="-0.65 0.65"/>
+    <velocity name="u_bucket" joint="bucket" kv="1" ctrlrange="-0.85 0.85"/>
+  </actuator>
+</mujoco>
